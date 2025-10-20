@@ -73,30 +73,68 @@ def get_magnitudes_per_year(earthquakes):
 def plot_average_magnitude_per_year(earthquakes):
     magnitudes_per_year = get_magnitudes_per_year(earthquakes)
     years = sorted(magnitudes_per_year.keys())
-    average_magnitudes = []
-    for year in years:
-        magnitudes = magnitudes_per_year[year]
-        average_magnitude = sum(magnitudes) / len(magnitudes)
-        average_magnitudes.append(average_magnitude)
 
-    plt.plot(years, average_magnitudes)
+    # Fill in missing years with 0 values
+    if years:
+        all_years = list(range(min(years), max(years) + 1))
+        average_magnitudes = []
+        for year in all_years:
+            if year in magnitudes_per_year:
+                magnitudes = magnitudes_per_year[year]
+                average_magnitude = sum(magnitudes) / len(magnitudes)
+                average_magnitudes.append(average_magnitude)
+            else:
+                average_magnitudes.append(0)
+    else:
+        all_years = []
+        average_magnitudes = []
+
+    plt.bar(all_years, average_magnitudes)
+
+    # Add value labels above each bar
+    for year, value in zip(all_years, average_magnitudes):
+        if value > 0:  # Only show label if there's data
+            plt.text(year, value, f'{value:.2f}', ha='center', va='bottom', fontsize=8)
+
     plt.xlabel('Year')
     plt.ylabel('Average Magnitude')
     plt.title('Average Earthquake Magnitude per Year')
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     plt.show()
 
 
 def plot_number_per_year(earthquakes):
     magnitudes_per_year = get_magnitudes_per_year(earthquakes)
     years = sorted(magnitudes_per_year.keys())
-    number_of_earthquakes = [len(magnitudes_per_year[year]) for year in years]
-    
-    plt.bar(years, number_of_earthquakes)
+
+    # Fill in missing years with 0 values
+    if years:
+        all_years = list(range(min(years), max(years) + 1))
+        number_of_earthquakes = []
+        for year in all_years:
+            if year in magnitudes_per_year:
+                number_of_earthquakes.append(len(magnitudes_per_year[year]))
+            else:
+                number_of_earthquakes.append(0)
+    else:
+        all_years = []
+        number_of_earthquakes = []
+
+    plt.bar(all_years, number_of_earthquakes)
+
+    # Add value labels above each bar
+    for year, value in zip(all_years, number_of_earthquakes):
+        if value > 0:  # Only show label if there's data
+            plt.text(year, value, str(value), ha='center', va='bottom', fontsize=8)
+
     plt.xlabel('Year')
     plt.ylabel('Number of Earthquakes')
     plt.title('Number of Earthquakes per Year')
     plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True))
+    plt.xticks(rotation=45)
+    plt.tight_layout()
     plt.show()
 
 
