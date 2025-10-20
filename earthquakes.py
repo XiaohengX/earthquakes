@@ -74,4 +74,3 @@ data = get_data()
 print(f"Total number of earthquakes is {count_earthquakes(data)}")
 max_magnitude, max_location = get_maximum(data)
 print(f"The strongest earthquake was at {max_location} with magnitude {max_magnitude}")
-
